@@ -1,8 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as PIXI from 'pixi.js';
+import confetti from 'canvas-confetti';
 
 function Page1() {
   const pixiContainerRef = useRef(null);
+  const [trialCount, setTrialCount] = useState(0);
 
   useEffect(() => {
     const app = new PIXI.Application({
@@ -20,16 +22,12 @@ function Page1() {
     app.loader.load(setup);
 
     function setup() {
-        const style = new PIXI.TextStyle({
-            fontFamily: 'Arial',
-            fontSize: 36,
-            fontWeight: 'bold', // Added bold font weight
-            fill: '#000000', // Set text color to black
-            backgroundColor: '#00ff99', // Added background color
-            padding: 10, // Added padding for background
-            borderRadius: 50, // Added border radius for oval-like shape
-        });
-        
+      const style = new PIXI.TextStyle({
+        fontFamily: 'Rocher',
+        fontSize: 50,
+        fill: '#000000',
+        align: 'center',
+      });
 
       const mytext = new PIXI.Text('The pig stood beside the horse.', style);
       mytext.x = app.renderer.width / 2;
@@ -72,13 +70,11 @@ function Page1() {
           const newPosition = this.dragData.getLocalPosition(this.parent);
           this.x = newPosition.x;
           this.y = newPosition.y;
-          console.log(this.x)
-          console.log(this.y)
 
           if (
             newPosition.x >= 425 && newPosition.x <= 530 &&
-            newPosition.y >= 421 && newPosition.y <= 470) 
-            {
+            newPosition.y >= 421 && newPosition.y <= 470
+          ) {
             if (!successAchieved) {
               showSuccessMessage();
               successAchieved = true;
@@ -92,27 +88,34 @@ function Page1() {
         this.alpha = 1;
         if (!successAchieved) {
           this.dragging = false;
+          setTrialCount(prevCount => prevCount + 1);
         }
       }
 
       function showSuccessMessage() {
         const successStyle = new PIXI.TextStyle({
-            
-        fontFamily: 'Arial',
-        fontSize: 36,
-        fontWeight: 'bold', // Added bold font weight
-        fill: '#000000', // Set text color to black
-        backgroundColor: '#00ff99', // Added background color
-        padding: 10, // Added padding for background
-        borderRadius: 50, // Added border radius for oval-like shape
+          fontFamily: 'Arial',
+          fontSize: 36,
+          fontWeight: 'bold',
+          fill: '#000000',
+          backgroundColor: '#00ff99',
+          padding: 10,
+          borderRadius: 50,
         });
-        
+
         const message = new PIXI.Text('Success!', successStyle);
         message.x = app.screen.width / 2;
         message.y = app.screen.height / 2;
         message.anchor.set(0.5);
 
         app.stage.addChild(message);
+
+        
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
 
         setTimeout(showButtons, 1000);
       }
@@ -155,12 +158,12 @@ function Page1() {
 
       function onButtonNextClick() {
         console.log('Next button clicked');
-        window.location.href = '/page2'; 
-    }
-      
+        window.location.href = '/page2';
+      }
+
       function onButtonPrevClick() {
-        console.log('previous button clicked');
-        window.location.reload(); // Reload the current page
+        console.log('Previous button clicked');
+        window.location.reload(); 
       }
     }
 
@@ -169,7 +172,16 @@ function Page1() {
     };
   }, []);
 
-  return <div ref={pixiContainerRef} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <div ref={pixiContainerRef} style={{ width: '100%', height: '100%' }}>
+      <div style={{ position: 'absolute', top: 10, right: 10, fontFamily: 'Rocher', 
+  fontSize: 30, 
+  color: '#000000', 
+  textAlign: 'center'  }}>
+        Trials: {trialCount}
+      </div>
+    </div>
+  );
 }
 
 export default Page1;

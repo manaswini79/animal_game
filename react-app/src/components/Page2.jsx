@@ -1,8 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import * as PIXI from 'pixi.js';
+import confetti from 'canvas-confetti';
 
 function Page2() {
   const pixiContainerRef = useRef(null);
+  const [trialCount, setTrialCount] = useState(0);
 
   useEffect(() => {
     const app = new PIXI.Application({
@@ -20,16 +22,15 @@ function Page2() {
     app.loader.load(setup);
 
     function setup() {
-        const style = new PIXI.TextStyle({
-            fontFamily: 'Arial',
-            fontSize: 36,
-            fontWeight: 'bold', // Added bold font weight
-            fill: '#000000', // Set text color to black
-            backgroundColor: '#00ff99', // Added background color
-            padding: 10, // Added padding for background
-            borderRadius: 50, // Added border radius for oval-like shape
-        });
-        
+      const style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 36,
+        fontWeight: 'bold',
+        fill: '#000000',
+        backgroundColor: '#00ff99',
+        padding: 10,
+        borderRadius: 50,
+      });
 
       const mytext = new PIXI.Text('The dog sat in front of the sheep.', style);
       mytext.x = app.renderer.width / 2;
@@ -73,11 +74,6 @@ function Page2() {
           this.x = newPosition.x;
           this.y = newPosition.y;
 
-          
-          
-          console.log(this.x)
-            console.log(this.y)
-
           if (
             newPosition.x >= 880 && newPosition.x <= 1080  &&
             newPosition.y >= 300 && newPosition.y <= 390
@@ -95,6 +91,7 @@ function Page2() {
         this.alpha = 1;
         if (!successAchieved) {
           this.dragging = false;
+          setTrialCount(prevCount => prevCount + 1);
         }
       }
 
@@ -119,6 +116,13 @@ function Page2() {
         message.anchor.set(0.5);
 
         app.stage.addChild(message);
+
+        // Fire confetti
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
 
         setTimeout(showButtons, 1000);
       }
@@ -162,10 +166,10 @@ function Page2() {
       function onButtonNextClick() {
         console.log('Next button clicked');
         window.location.href = '/page3'; // Navigate to the '/page2' route
-    }
-      
+      }
+
       function onButtonPrevClick() {
-        console.log('previous button clicked');
+        console.log('Previous button clicked');
         window.location.reload(); // Reload the current page
       }
     }
@@ -175,7 +179,16 @@ function Page2() {
     };
   }, []);
 
-  return <div ref={pixiContainerRef} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <div ref={pixiContainerRef} style={{ width: '100%', height: '100%' }}>
+      <div style={{ position: 'absolute', top: 10, right: 10, fontFamily: 'Rocher', 
+  fontSize: 30, 
+  color: '#000000', 
+  textAlign: 'center'  }}>
+        Trials: {trialCount}
+      </div>
+    </div>
+  );
 }
 
 export default Page2;

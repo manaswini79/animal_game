@@ -1,38 +1,49 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-const Home = () => {
-    return (
-        <div style={styles.container}>
+function Home() {
+  const history = useHistory();
 
-            <Link to="/page1" style={styles.link}>
-                <button style={styles.button}>Start Playing</button>
-            </Link>
-        </div>
-    );
+  const navigateToPage1 = () => {
+    history.push('/page1');
+  };
+
+  return (
+    <div style={styles.container}>
+      <img src="images/Animal.png" alt="Description of Image" style={styles.image} />
+      <button style={styles.button} onClick={navigateToPage1}>
+        Start playing
+      </button>
+    </div>
+  );
 }
 
 const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh', // Ensure the container takes up the full height of the viewport
-    },
-    link: {
-        textDecoration: 'none',
-    },
-    button: {
-        padding: '10px 20px',
-        fontSize: '18px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s ease',
-    },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 1450,
+    height: '100vh',
+    backgroundColor: '#FFFFFF', 
+    textAlign: 'center',
+  },
+  image: {
+    width: '400px', 
+    height: 'auto',
+    marginBottom: '20px', 
+  },
+  button: {
+    padding: '20px 40px',
+    fontSize: '24px',
+    fontFamily: 'Rocher',
+    backgroundColor: '#89CFF0', 
+    color: '#000000', 
+    border: 'none',
+    borderRadius: '20px',
+    cursor: 'pointer',
+  },
 };
 
 export default Home;
